@@ -1,3 +1,5 @@
+import argparse
+
 import cv2
 import numpy as np
 
@@ -25,7 +27,7 @@ def detect_deepfake(image_path):
         face_roi = image[y:y+h, x:x+w]
 
         # Apply all deepfake detection techniques
-        total_checks += 1
+        total_checks += 5
         fake_votes += skin_color_analysis(face_roi)
         fake_votes += lighting_inconsistency(face_roi)
         fake_votes += blur_detection(face_roi)
@@ -34,8 +36,8 @@ def detect_deepfake(image_path):
 
     # If more than 60% of checks flag it as fake, classify it as fake
     if fake_votes / total_checks > 0.6:
-        return "Fake"
-    return "Real"
+        return "Visual anomalies flagged"
+    return "No strong visual anomalies flagged"
 
 # **1️⃣ Skin Color Analysis (Detects unusual skin tone variation)**
 def skin_color_analysis(face_roi):
@@ -83,7 +85,12 @@ def noise_analysis(face_roi):
     threshold = np.std(cv2.cvtColor(face_roi, cv2.COLOR_BGR2GRAY)) * 0.8  # Dynamic threshold
     return 1 if noise_diff > threshold else 0
 
-# **Test the deepfake detector**
-image_path = "test_image.png"  # Change this to your image path
-result = detect_deepfake(image_path)
-print("Deepfake Detection Result:", result)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Inspect visible face regions for experimental image anomalies.")
+    parser.add_argument("image", help="Path to a local image")
+    args = parser.parse_args()
+    result = detect_deepfake(args.image)
+    if result == "Error":
+        parser.exit(2)
+    print(result)
+    print("This heuristic is not an authenticity verdict.")
