@@ -6,4 +6,4 @@ An early deepfake-detection prototype with a static frontend and several experim
 - [python.py](python.py) and [back2.py](back2.py) contain separate Flask experiments.
 - [backened.py](backened.py) contains OpenCV-based image-analysis heuristics.
 
-The repository has no pinned Python dependency manifest. The FaceForensics path is a Git link and its contents are not included in a standard checkout. Treat detection output as experimental.
+Run `python -m pip install -r requirements.txt`, then `python backened.py /path/to/photo.jpg` to inspect a local image. The output describes visible anomalies in detected face regions. The FaceForensics path is a Git link and its contents are not included in a standard checkout. Treat detection output as experimental.
